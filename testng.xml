@@ -1,0 +1,15 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Yitran">
+  <test name="Yitran Survey App">
+    <classes>
+     <class name="runner.CreateSurveyRunner"/>
+     <class name="runner.InstallDCURunner"/>
+      <class name="runner.InstallNICRunner"/>
+      <class name="runner.InstallRepeaterRunner"/>
+      <class name="runner.MaintenanceDCURunner"/>
+      <class name="runner.MaintenanceRepeaterRunner"/>
+      <class name="runner.MaintenanceJNJMeterRunner"/>
+    </classes>
+  </test>
+</suite>
+	
