@@ -7,7 +7,7 @@ import java.io.File;
 import java.net.URL;
 import java.time.Duration;
 
-public class baseTest {
+public class BaseTestRunner {
 
 	public static AndroidDriver driver;
 

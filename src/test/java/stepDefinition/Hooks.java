@@ -1,6 +1,6 @@
 package stepDefinition;
 
-import base.baseTest;
+import base.BaseTestRunner;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 
@@ -13,14 +13,14 @@ public class Hooks {
 
     ExtentReports extent;
     ExtentTest test;
-    baseTest base = new baseTest();
+    BaseTestRunner base = new BaseTestRunner();
 
     @Before
     public void setUp() {
         extent = ExtentReportManager.getInstance();
         test = extent.createTest("Yitan APP invoked Sucessfully");
         base.initializeDriver();
-        driverFactory.setDriver(baseTest.driver);
+        driverFactory.setDriver(BaseTestRunner.driver);
         test.info("Yitran App Launched");
     }
 
@@ -29,8 +29,8 @@ public class Hooks {
 
     @After
     public void tearDown() {
-        if (baseTest.driver != null) {
-            baseTest.driver.quit();
+        if (BaseTestRunner.driver != null) {
+            BaseTestRunner.driver.quit();
             test.info("Driver closed");
         }
         extent.flush(); // Write report
