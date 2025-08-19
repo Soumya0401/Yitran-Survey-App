@@ -56,8 +56,9 @@ jobs:
       - name: Run Tests
         run: mvn test
 
-      - name: Upload Test Reports
+      - name: Upload Extent Report
         uses: actions/upload-artifact@v4
         with:
-          name: cucumber-reports
-          path: target/cucumber-reports/
+          name: ExtentReport
+          path: target/ExtentReport.html
+
