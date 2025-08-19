@@ -3,12 +3,12 @@
   <test name="Yitran Survey App">
     <classes>
      <class name="runner.CreateSurveyRunner"/>
-     <class name="runner.InstallDCURunner"/>
+     <!-- <class name="runner.InstallDCURunner"/>
       <class name="runner.InstallNICRunner"/>
       <class name="runner.InstallRepeaterRunner"/>
       <class name="runner.MaintenanceDCURunner"/>
       <class name="runner.MaintenanceRepeaterRunner"/>
-      <class name="runner.MaintenanceJNJMeterRunner"/>
+      <class name="runner.MaintenanceJNJMeterRunner"/>  -->
     </classes>
   </test>
 </suite>
