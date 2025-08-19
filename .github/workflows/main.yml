@@ -1,5 +1,4 @@
 name: Yitran-Survey-App
-
 on:
   push:
     branches:
@@ -18,7 +17,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Step 2: Set up JDK 21 (since your Maven project needs it)
+      # Step 2: Set up JDK 21
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
@@ -31,62 +30,68 @@ jobs:
         uses: android-actions/setup-android@v3
 
       # Step 4: Set ANDROID_HOME and update PATH
-      - name: Set ANDROID_HOME and update PATH (Windows)
+      - name: Set ANDROID_HOME and update PATH
+        shell: cmd
         run: |
-          echo "ANDROID_HOME=$env:ANDROID_SDK_ROOT" >> $env:GITHUB_ENV
-          echo "$env:ANDROID_SDK_ROOT\platform-tools" >> $env:GITHUB_PATH
-        shell: pwsh
+          echo ANDROID_HOME=%ANDROID_SDK_ROOT%>> %GITHUB_ENV%
+          echo %ANDROID_SDK_ROOT%\platform-tools>> %GITHUB_PATH%
 
-      # Step 5: Install required system image & tools
-      - name: Install system image
-        run: sdkmanager "system-images;android-30;google_apis;x86_64" "platforms;android-30" "platform-tools"
-        shell: bash
+      # Step 5: Install Android system image & platform tools
+      - name: Install system image & platform tools
+        shell: cmd
+        run: |
+          echo y | %ANDROID_SDK_ROOT%\cmdline-tools\latest\bin\sdkmanager.bat "system-images;android-30;google_apis;x86"
+          echo y | %ANDROID_SDK_ROOT%\cmdline-tools\latest\bin\sdkmanager.bat "platforms;android-30"
+          echo y | %ANDROID_SDK_ROOT%\cmdline-tools\latest\bin\sdkmanager.bat "platform-tools"
 
       # Step 6: Create Emulator
       - name: Create Emulator
-        run: avdmanager create avd -n testEmulator -k "system-images;android-30;google_apis;x86_64" --device pixel --force
-        shell: bash
+        shell: cmd
+        run: |
+          %ANDROID_SDK_ROOT%\cmdline-tools\latest\bin\avdmanager.bat create avd -n testEmulator -k "system-images;android-30;google_apis;x86" -d pixel -f
 
       # Step 7: Start Emulator
       - name: Start Emulator
-        run: Start-Process -FilePath emulator -ArgumentList "-avd testEmulator -no-window -no-audio -no-boot-anim -gpu off" -NoNewWindow
-        shell: pwsh
-
-      - name: Wait for device
+        shell: cmd
         run: |
+          start /B %ANDROID_SDK_ROOT%\emulator\emulator.exe -avd testEmulator -no-snapshot -no-audio -no-boot-anim -gpu off -no-window
+          timeout /t 60
           adb wait-for-device
           adb shell input keyevent 82
-        shell: bash
 
-      # Step 8: Set up Node.js (for Appium server)
+      # Step 8: Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 21
 
+      # Step 9: Install Appium server
       - name: Install Appium server
+        shell: cmd
         run: |
           npm install -g appium@2.11.3
           appium driver install uiautomator2
-        shell: bash
 
-      # Step 9: Start Appium server in background
+      # Step 10: Start Appium server
       - name: Start Appium server
+        shell: cmd
         run: |
-          nohup appium --base-path /wd/hub --log-level info > appium.log 2>&1 &
-        shell: bash
+          start /B appium --base-path /wd/hub --log-level info
 
-      # Step 10: Build project with Maven (skip tests first)
+      # Step 11: Build project with Maven
       - name: Build with Maven
+        shell: cmd
         run: mvn clean install -DskipTests=true
 
-      # Step 11: Run Appium + Selenium + Cucumber Tests
+      # Step 12: Run Tests
       - name: Run Tests
+        shell: cmd
         run: mvn test
 
-      # Step 12: Upload Cucumber test reports
+      # Step 13: Upload Cucumber test reports
       - name: Upload Test Reports
         uses: actions/upload-artifact@v4
         with:
           name: cucumber-reports
           path: target/cucumber-reports/
+
