@@ -34,10 +34,7 @@ jobs:
 
       - name: Start Emulator
         run: |
-          nohup emulator -avd testEmulator -no-snapshot -no-audio -no-boot-anim -gpu swiftshader_indirect -no-window &
-          adb wait-for-device
-          adb shell input keyevent 82
-        timeout-minutes: 5
+            nohup $ANDROID_SDK_ROOT/emulator/emulator -avd testAVD -no-snapshot -noaudio -no-window -gpu swiftshader_indirect &
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
