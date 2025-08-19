@@ -41,9 +41,9 @@ jobs:
         with:
           node-version: 21
 
-      - name: Install Appium server
+      - name: Install Appium
         run: |
-          npm install -g appium@2.11.3
+          npm install -g appium@latest
           appium driver install uiautomator2
 
       - name: Start Appium server
