@@ -51,11 +51,13 @@ jobs:
         run: |
           nohup appium --base-path /wd/hub --log-level info > appium.log 2>&1 &
 
+       # Step 4: Build with Maven (skip tests first)
       - name: Build with Maven
-        run: mvn clean install -DskipTests
+        run: mvn clean install -DskipTests=true
 
-      - name: Run Tests
-        run: mvn  test
+      # Step 5: Run Selenium/Cucumber Tests (headless mode)
+      - name: Run Cucumber/Selenium Tests
+        run: mvn test -Dheadless=true
 
       - name: Upload Extent Report
         uses: actions/upload-artifact@v4
